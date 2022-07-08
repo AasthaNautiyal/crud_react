@@ -1,118 +1,149 @@
-import React, { Component } from 'react';
-import { useEffect } from 'react';
-import {useState} from 'react';
-import './App.css'
+import React,{Fragment, useState} from "react";
+import "./App.css";
+import {nanoid} from "nanoid";
+function App()
+{
+  const userData=[{name:"XYZ",age:"0",gender:"female"}];
+  const [user,setUser]=useState(userData);
+
+  const[addData,setData]=useState({name:" ",age:0,gender:" "});
+
+  const [buttonText, setButtonText] = useState("Add");
+  const [editFormData, setEditFormData] = useState({
+    name: "",
+    age: 0,
+    gender: "",
+  });
+
+  const [editContactId, setEditContactId] = useState(null);
 
 
-class App extends Component {
+  const clickSubmit=(e)=>{
+     e.preventDefault();
+     const nameData=e.target.getAttribute("name");
+     const nameValue=e.target.value;
 
-  constructor(props){
-    super(props);
-    this.state={
-      title: 'CRUD Application',
-      act: 0,
-      index: '',
-      datas: []
-    }
-  } 
+     const newFormData={...addData};
+     newFormData[nameData]=nameValue;
 
-
-  componentDidMount(){
-    this.refs.name.focus();
-  }
+     setData(newFormData);
+  };
   
 
-
-    fSubmit = (e) =>{
+  const handleFormSubmit=(e)=>{
     e.preventDefault();
-    console.log('try');
+    const newData={
+      id: nanoid(),
+      name:addData.name,
+      age:addData.age,
+      gender:addData.gender,
+    };
+    const newUser=[...user,newData];
+    setUser(newUser);
+  };
 
-    let datas = this.state.datas;
-    let name = this.refs.name.value;
-    let age = this.refs.age.value;
-    let gender=this.refs.gender.value;
-    let city=this.refs.city.value;
+  const handleDelete=(e)=>
+  {
+      const newContacts = [...user];
+  
+      const index = user.findIndex((users) => users.name === e);
+  
+      newContacts.splice(index, 1);
+  
+    setUser(newContacts);
+  
+  };
+  const handleEdit = (event) => {
+    event.preventDefault();
 
-    if(this.state.act === 0){   
-      let data = {
-        name, age , gender ,city
-      }
-      datas.push(data);
-    }else{                      
-      let index = this.state.index;
-      datas[index].name = name;
-      datas[index].age = age;
-      datas[index].gender=gender;
-      datas[index].city=city;
-    }    
+    const fieldName = event.target.getAttribute("name");
+    const fieldValue = event.target.value;
 
-    this.setState({
-      datas: datas,
-      act: 0
-    });
+    const newFormData = { ...editFormData };
+    newFormData[fieldName] = fieldValue;
 
-    this.refs.myForm.reset();
-    this.refs.name.focus();
-  }
+    setEditFormData(newFormData);
+  };
+  const handleEditFormSubmit = (event) => {
+    event.preventDefault();
 
-  fRemove = (i) => {
-    let datas = this.state.datas;
-    datas.splice(i,1);
-    this.setState({
-      datas: datas
-    });
+    const editedContact = {
+      id: editContactId,
+      name: editFormData.name,
+      age: editFormData.age,
+      gender: editFormData.gender,
+    };
 
-    this.refs.myForm.reset();
-    this.refs.name.focus();
-  }
+    const newContacts = [...user];
 
-  fEdit = (i) => {
-    let data = this.state.datas[i];
-    this.refs.name.value = data.name;
-    this.refs.age.value = data.age;
-    this.refs.gender.value=data.gender;
-    this.refs.city.value=data.city;
+    const index = user.findIndex((contact) => contact.id === editContactId);
 
-    this.setState({
-      act: 1,
-      index: i
-    });
+    newContacts[index] = editedContact;
 
-    this.refs.name.focus();
-  }  
- 
+    setUser(newContacts);
+    setEditContactId(null);
+  };
 
-  render() {
-    let datas = this.state.datas;
-    return (
-      <div className="App">
-        <h2>{this.state.title}</h2>
-        <form ref="myForm" className="myForm">
-          <input type="text" ref="name" placeholder="Name" className="formField" />
-          <input type="text" ref="age" placeholder="Age" className="formField" />
-          <input type="text" ref="gender" placeholder="Gender" className="formField"/>
-          <input type="text" ref="city" placeholder="City" className="formField"/>
-          <button onClick={(e)=>this.fSubmit(e)} className="myButton"> Add </button>
+  const handleEditClick = (event, user) => {
+    event.preventDefault();
+    setEditContactId(user.id);
+
+    const formValues = {
+      name: user.name,
+      age: user.name,
+      gender: user.gender,
+    };
+
+    setEditFormData(formValues);
+  };
+
+  return(
+    <div className="main">
+       <h2>CRUD APP</h2>
+       <div className="form">
+        <form onSubmit={handleFormSubmit}>
+        <div><input type="text" name="name"placeholder="NAME" onChange={clickSubmit}/></div>
+        <div><input type="number" name="age"placeholder="AGE" onChange={clickSubmit}/></div>
+        <div><input type="text"name="gender" placeholder="GENDER" onChange={clickSubmit}/></div>
+        <button type="submit">{buttonText}</button>
         </form>
-        <br></br>
-        <div class="card">
-          <div class='container'>
-          {datas.map((data, i) =>
-            <li key={i} className="myList">
-              <h5>
-                <div class='container'>{i+1}.Name: {data.name}</div>
-                <div class='container'> Age:{data.age}</div>
-                <div class='container'>Gender:{data.gender}</div> 
-                <div class='container'>City:{data.city}</div></h5>
-              <button onClick={()=>this.fRemove(i)} className="myListButton"> Delete </button>
-              <button onClick={()=>this.fEdit(i)} className="myListButton"> Update </button>
-            </li>
-          )}
-      </div>
-      </div>
-      </div>
-    );
-  }
+       </div>
+       <form onSubmit={handleEditFormSubmit}>
+       <table>
+        <thead>
+          <tr>
+            <th>NAME</th>
+            <th>AGE</th>
+            <th>GENDER</th>
+          </tr>
+        </thead>
+        <tbody>
+        {user.map((e)=>(
+          <Fragment>
+            {editContactId === e.id ?(
+              <form>
+              <input type="text" placeholder="NAME" name="name"value={editFormData.name}onChange={handleEdit}></input>
+              <input type="number" placeholder="AGE" name="age" value={editFormData.age} onChange={handleEdit}></input>
+              <input type="text"placeholder="GENDER"name="gender"value={editFormData.gender}onChange={handleEdit}></input>
+              <button type="submit">Update</button>
+            </form>
+              ):(
+                  <tr>
+                  <td>{e.name}</td>
+                  <td>{e.age}</td>
+                  <td>{e.gender}</td>
+                  <td><button onClick={function(event){handleEditClick(event,e); setButtonText("Update")}}>Edit</button></td>
+                  <td><button onClick={() => handleDelete(e.name)}>Delete</button></td>
+                  </tr>
+            )}
+            </Fragment>
+          ))
+          }
+        </tbody>
+       </table>
+       </form>
+    </div>
+  )
 }
 
 export default App;

@@ -1,6 +1,17 @@
+.main{
+    margin-left:50 ;
+}
+.form{
+    align-items: center;
+}
 .App {
     margin: auto;
     width: 50%;
+    align-items: center;
+}
+table{
+    align-items: center;
+    background-color: antiquewhite;
 }
 .card {
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
@@ -29,10 +40,10 @@
     box-sizing: border-box;
 }
 
-.myButton {
+table {
     width: 100%;
-    background-color:lightskyblue;
-    color: white;
+    background-color:antiquewhite;
+    color: black;
     padding: 14px 20px;
     margin: 8px 0;
     border: none;
@@ -40,11 +51,11 @@
     cursor: pointer;
 }
 
-.myList {
+.main {
     list-style: none;
 }
 
-.myListButton {
+div{
     display: inline-block;
     height: auto;
     width: auto;
