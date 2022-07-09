@@ -15,7 +15,7 @@ const UserTable = (props:any) => (
         props.users.map((user:any) => (
           <tr key={user.id}>
             <td>{user.name}</td>
-            <td>{user.username}</td>
+            <td>{user.age}</td>
             <td>{user.gender}</td>
             <td>
               <button
