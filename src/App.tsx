@@ -33,7 +33,7 @@ const App = () => {
   };
   return (
     <div className="container">
-      <h1>CRUD App with Hooks</h1>
+      <h1>CRUD App</h1>
       <div className="flex-row">
         <div className="flex-large">
           <div>
