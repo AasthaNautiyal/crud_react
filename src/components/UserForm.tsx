@@ -30,9 +30,8 @@ const useStyles = makeStyles({
 })
 interface IProps {
   editing:boolean;
-  currentUser:IUser | any;
+  currentUser:IUser;
   setEditing:React.Dispatch<React.SetStateAction<boolean>>;
-  setCurrentUser:any;
   updateUser: (id: number, newUser: IUser) => void;
   addUser: (user: IUser) => void;
 }
@@ -58,7 +57,7 @@ const rules = [
     }
   );
   
-  const initialFormState = { id: null, name: "", age: "" ,gender: ""};
+  const initialFormState = { id: 0, name: "", age: 0,gender: ""};
   const [user, setUser] = useState(
     props.editing ? props.currentUser : initialFormState
   )
@@ -73,18 +72,19 @@ const rules = [
     setUser(props.currentUser);
   }, [props]);
 
-  const resetAddUser = () => {
+/* const resetAddUser = () => {
     props.setEditing(false);
     setUser(initialFormState);
     props.setCurrentUser(initialFormState);
   };
+  */
+
   const classes = useStyles();
   return (
     <form
       onSubmit={event => {
         event.preventDefault();
         props.editing ? props.updateUser(user.id, user) : props.addUser(user);
-        resetAddUser();
       }}
     >
       <div className={classes.formStyle}>
@@ -113,11 +113,7 @@ const rules = [
       </div><br></br>
       <div className={classes.btnStyle}>
       <button>{props.editing ? "Update user" : "Add user"}</button>
-      {props.editing && (
-        <button onClick={resetAddUser}>
-          Cancel
-        </button>
-      )}
+     
       </div>
     </form>
   );

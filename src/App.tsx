@@ -25,7 +25,7 @@ const useStyles = makeStyles({
 })
 
 const App = () => {
-  const usersData: Array<IUser> = [];
+  const usersData: Array<IUser> = [{id:0,name:" ",age:0,gender:""}];
   const initialFormState = { id:0, name: "", age:0,gender:""};
 
   const [users, setUsers] = useState(usersData);
@@ -62,7 +62,7 @@ const App = () => {
               editing={editing}
               setEditing={setEditing}
               currentUser={currentUser}
-              setCurrentUser={setCurrentUser}
+              //setCurrentUser={setCurrentUser}
               updateUser={updateUser}
               addUser={addUser}
             />
