@@ -1,13 +1,32 @@
 import React from 'react';
-import './App.css';
 import { useState } from 'react';
 import { IUser } from './components/interface';
 import UserForm from './components/UserForm';
 import UserTable from './components/UserTable';
+import { makeStyles } from '@material-ui/core';
+
+const useStyles = makeStyles({
+  formStyle: {
+      fontFamily: 'Playfair Display',
+      width: "100%",
+      border: "none",
+      backgroundColor:'#e0f2f1',
+      display: "flex",
+     flexDirection: "column",
+      alignItems:"center",
+  },
+  headStyle:{
+    fontFamily: 'Playfair Display',
+    backgroundColor: '#b2dfdb',
+    alignItems:'center',
+    display: "flex",
+    flexDirection: "column",
+    }
+})
 
 const App = () => {
   const usersData: Array<IUser> = [];
-  const initialFormState = { id:0, name: "", age:0 ,gender:" "};
+  const initialFormState = { id:0, name: "", age:0,gender:""};
 
   const [users, setUsers] = useState(usersData);
   const [editing, setEditing] = useState(false);
@@ -17,7 +36,7 @@ const App = () => {
     user.id = users.length + 1;
     setUsers([...users, user]);
   };
-  const deleteUser = (id:any) => {
+  const deleteUser = (id:number) => {
     setEditing(false);
     setUsers(users.filter(user => user.id !==id));
   };
@@ -31,11 +50,12 @@ const App = () => {
     setEditing(false);
     setUsers(users.map(i => (i.id === id ? newUser : i)));
   };
+  const classes = useStyles();
   return (
-    <div className="container">
-      <h1>CRUD App with Hooks</h1>
-      <div className="flex-row">
-        <div className="flex-large">
+    <div>
+     <h1 className={classes.headStyle}>CRUD App</h1>
+      <div className={classes.formStyle}>
+        <div>
           <div>
             <h2>{editing ? "Edit user" : "Add user"}</h2>
             <UserForm
@@ -47,8 +67,6 @@ const App = () => {
               addUser={addUser}
             />
           </div>
-        </div>
-        <div className="flex-large">
           <h2>View users</h2>
           <UserTable users={users} editRow={editRow} deleteUser={deleteUser} />
         </div>
