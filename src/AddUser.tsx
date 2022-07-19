@@ -1,53 +1,63 @@
 import { useStoreState } from "./store/hooks";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useStoreActions} from "./store/hooks";
+import "./App.css";
 const AddUser = () => {
- /* const initialFormState = {name: "", age: 0,gender: ""};
-  const[user,setuserData]=useState(initialFormState);
-  const {setData}=useStoreActions((store)=>store);
-  const handleChange=(e:any)=>{
-    setuserData(e.target.value);
-  }
-  */
-  const [newName, setnewName] = useState("");
-  const [newAge,setnewAge]=useState("");
-  const [gender,setGender]=useState("");
-  const {setName}=useStoreActions((store)=>store);
-  const {setAge}=useStoreActions((store)=>store);
-  const {setGen}=useStoreActions((store)=>store);
-  const {add}=useStoreActions((store)=>store);
-
+  const initialData={name:"",id:"",age:0,gender:""};
+  const [user, setUser] = useState(initialData);
+  const {addUser,updateUser,editUser}=useStoreActions((store)=>store);
+  const{editingUser}=useStoreState((store)=>store);
+  const handleChange = (e: { target: { name: string; value: string; }; }) => {
+    const { name, value } = e.target;
+    setUser(prev => {
+        return ({
+            ...prev,
+            [name]: value
+        })
+    })
+}
+useEffect(()=>{
+  setUser(editingUser||initialData)
+},[editingUser])
   return (
     <div>
       <form
         onSubmit={e => {
           e.preventDefault();
-          setName(newName);
-          setAge(newAge);
-          setGen(gender);
-          add({newName,newAge,gender});
+          if(!user.id)
+          { 
+            addUser(user)
+          }
+          else
+          {
+            updateUser(user)
+            editUser(undefined)
+          }
         }}
       >
         <input
           type="text"
-          id=""
-          value={newName}
-          onChange={(e)=>setnewName(e.target.value)} 
+          name="name"
+          id="name"
+          value={user.name}
+          onChange={handleChange} 
           placeholder="Name"
         />
         <input
           type="number"
-          value={newAge}
-          onChange={(e)=>setnewAge(e.target.value)}
+          name="age"
+          id="age"
+          value={user.age}
+          onChange={handleChange}
           placeholder="Age"
         />
-        <select name="gender" id="gender" value={gender} onChange={(e)=>setGender(e.target.value)}> 
+        <select name="gender" id="gender" value={user.gender} onChange={handleChange}> 
         <option value="">Gender</option>
         <option value="Female">Female</option>
         <option value="Male">Male</option>
         <option value="Others">Others</option>
         </select>
-        <button>Add</button>
+        <button>{editingUser?"Update":"Add"}</button>
       </form>
     </div>
   );

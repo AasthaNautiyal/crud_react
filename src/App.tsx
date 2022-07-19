@@ -1,15 +1,15 @@
-import React, { Component, useState } from 'react';
+import React from 'react';
 import AddUser from './AddUser';
-import TodoItem from './TodoItem';
-
+import DisplayUser from './DisplayUser';
+import "./App.css";
 function App() {
   
   return(
-      <div>
+      <div className='container'> 
         <h1>CRUD</h1>
         <AddUser/>
-        <TodoItem/>
-      </div>
+        <DisplayUser/>
+     </div>
   )
 }
 

@@ -1,59 +1,41 @@
 import { Action,action } from "easy-peasy";
-import uuid from "uuid";
-export interface StoreModel{
-    id:number;
+import { v4 } from "uuid";
+interface user{
+    id:string;
     name:string;
-    age:string;
     gender:string;
-    addedUsers:string[];
-    setName:Action<this,string>;
-    setAge:Action<this,string>;
-    setGen:Action<this,string>;
-    add:Action<this,string>;
-    remove:Action<this,string>;
-    edit:Action<this,string>;
-    /*userData:{
-        name:string,
-        age:number,
-        gender:string,
-    };
-    setData:Action<this,any>;
-    */
-   // remove:Action<this,any>;
-    
+    age:number;
+}
+export interface StoreModel{
+   users:user[],
+   editingUser?:user,
+   addUser:Action<this,Omit<user,"id">>;
+   editUser:Action<this,string|undefined>;
+   deleteUser:Action<this,string>;
+   updateUser:Action<this,user>;
 }
 const model:StoreModel={
-    //userData:{name:"", age:0, gender:""},
-    //setData:action((state,payload)=>{
-      //  state.userData=payload;
-//}),
-    id:0,
-    name:"",
-    age:"",
-    gender:"",
-    addedUsers:[],
-    setName:action((state,payload)=>{
-        state.name=payload;
+    users:[],
+    addUser:action((state,payload)=>{
+        state.users=[...state.users,{...payload,id:v4()}];
     }),
-    setAge:action((state,payload)=>{
-        state.age=payload;
+    editUser:action((state,payload)=>{
+        state.editingUser= state.users.find((data)=>{
+            return(data.id===payload)
+         })
     }),
-    setGen:action((state,payload)=>{
-        state.gender=payload;
-    }),
-    edit:action((state,id)=>{
-        state.addedUsers=state.addedUsers.find(user => {
-            return (user===id);
+    updateUser:action((state,payload)=>{
+        state.users=state.users.map((data)=>{
+            if(data.id===payload.id)
+            {
+                return payload;
+            }
+            return data;
         })
-}),
-    add: action((state, payload) => {
-        payload.id = uuid.v4();
-        state.addedUsers = [...state.addedUsers, payload];
-      }),
-      remove: action((state, id) => {
-        state.addedUsers = state.addedUsers.filter(todo => todo !== id);
-      })
-    
+    }),
+    deleteUser:action((state,payload)=>{
+        state.users = state.users.filter(todo => todo.id !== payload);
+    })
 };
 
 export default model;
