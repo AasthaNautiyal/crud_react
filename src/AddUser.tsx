@@ -22,7 +22,7 @@ useEffect(()=>{
   return (
     <div>
       <form
-        onSubmit={e => {
+        onSubmit={e=>{
           e.preventDefault();
           if(!user.id)
           { 
@@ -33,6 +33,12 @@ useEffect(()=>{
             updateUser(user)
             editUser(undefined)
           }
+          setUser({
+            name: "",
+            age: 0,
+            gender: "",
+            id: ""
+        })
         }}
       >
         <input
