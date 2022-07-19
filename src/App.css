@@ -18,14 +18,6 @@ body {
     overflow: hidden;
   }
   
-  .todo {
-    padding: 5px 15px;
-    margin-bottom: 5px;
-    background: #f4f4f4;
-    display: flex;
-    justify-content: space-between;
-  }
-    
   input[type="text"] {
     margin: 5px 0;
     padding: 5px;
